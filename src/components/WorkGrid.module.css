@@ -14,7 +14,14 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  transform: rotate(-1deg);
+  opacity: 0;
+  transform: translateY(10px) rotate(-1deg);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+
+.annotationRevealed {
+  opacity: 1;
+  transform: translateY(0) rotate(-1deg);
 }
 
 .annotation::after {
@@ -65,6 +72,21 @@
 .card:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.18);
+}
+
+.cardAnimated {
+  animation: card-reveal 0.6s var(--ease-out) backwards;
+}
+
+@keyframes card-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .cardImage {

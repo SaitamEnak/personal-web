@@ -1,10 +1,19 @@
+import type { CSSProperties } from 'react';
 import type { Project } from '../lib/types';
 import styles from './WorkGrid.module.css';
 
-type Props = { project: Project };
+type Props = {
+  project: Project;
+  index?: number;
+};
 
-export function WorkCard({ project }: Props) {
-  const card = (
+const STAGGER_MS = 50;
+
+export function WorkCard({ project, index = 0 }: Props) {
+  const className = `${styles.card} ${styles.cardAnimated}`;
+  const style: CSSProperties = { animationDelay: `${index * STAGGER_MS}ms` };
+
+  const img = (
     <img
       src={project.thumbnailUrl}
       alt={project.title}
@@ -17,19 +26,20 @@ export function WorkCard({ project }: Props) {
     return (
       <a
         href={project.url}
-        className={styles.card}
+        className={className}
+        style={style}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={project.title}
       >
-        {card}
+        {img}
       </a>
     );
   }
 
   return (
-    <div className={styles.card} aria-label={project.title}>
-      {card}
+    <div className={className} style={style} aria-label={project.title}>
+      {img}
     </div>
   );
 }
