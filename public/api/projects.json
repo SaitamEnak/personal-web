@@ -1,0 +1,20 @@
+{
+  "projects": [
+    { "id": "1",  "title": "Project 1",  "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "2",  "title": "Project 2",  "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "3",  "title": "Project 3",  "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "4",  "title": "Project 4",  "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "5",  "title": "Project 5",  "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "6",  "title": "Project 6",  "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "7",  "title": "Project 7",  "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "8",  "title": "Project 8",  "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "9",  "title": "Project 9",  "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "10", "title": "Project 10", "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "11", "title": "Project 11", "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "12", "title": "Project 12", "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "13", "title": "Project 13", "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "14", "title": "Project 14", "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "15", "title": "Project 15", "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "16", "title": "Project 16", "thumbnailUrl": "placeholderthumbnail.png" }
+  ]
+}

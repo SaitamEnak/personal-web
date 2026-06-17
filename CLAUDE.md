@@ -10,7 +10,10 @@ Personal portfolio for Matías Canepa (Product Designer). Single-page site with 
 
 - **Vite + React 18 + TypeScript** (SPA, no router yet)
 - **CSS Modules + CSS variables** for theming (no Tailwind, no UI library)
-- **Vercel** for hosting; **Vercel Edge Function** at `api/projects.ts` proxies the CMS
+- **GitHub Pages** for hosting via the workflow at `.github/workflows/deploy.yml`.
+  - Vite `base: '/personal-web/'` so assets resolve at the repo subpath.
+  - Project list is served as a static JSON at `public/api/projects.json` (16 placeholders for now).
+  - `api/projects.ts` (Vercel Edge Function) is kept in the repo as a reference for when the site moves to a host that supports serverless functions — it is NOT used by the Pages build.
 - Always use `pnpm` (never `npm` / `npx`)
 
 ## Commands
