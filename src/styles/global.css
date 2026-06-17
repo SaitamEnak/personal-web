@@ -13,6 +13,7 @@ body {
 html {
   background-color: var(--color-bg);
   color: var(--color-body);
+  color-scheme: light;
   font-family: var(--font-body);
   font-weight: var(--weight-body);
   font-size: 16px;
@@ -22,6 +23,10 @@ html {
   text-rendering: optimizeLegibility;
   transition: background-color var(--dur-base) var(--ease-out),
     color var(--dur-base) var(--ease-out);
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
 }
 
 body {
