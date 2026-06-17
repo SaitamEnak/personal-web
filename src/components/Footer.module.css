@@ -1,0 +1,19 @@
+.footer {
+  padding: var(--space-6) var(--gutter) var(--space-8);
+  color: var(--color-body);
+  font-size: var(--fs-sm);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.script {
+  font-family: var(--font-intervention);
+  color: var(--color-intervention);
+  font-size: 1.5rem;
+  margin-left: 0.35rem;
+}

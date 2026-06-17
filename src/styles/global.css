@@ -1,0 +1,96 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: var(--color-bg);
+  color: var(--color-body);
+  font-family: var(--font-body);
+  font-weight: var(--weight-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+body {
+  min-height: 100dvh;
+  position: relative;
+}
+
+/* Hexagonal dot lattice — SVG mask guarantees perfectly circular dots
+   regardless of mask-size aspect ratio. Five dots per tile (four corners
+   shared with neighbors + one center) form the hex lattice when tiled. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--color-pattern-dot);
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 24.249'><circle cx='0' cy='0' r='1' fill='black'/><circle cx='14' cy='0' r='1' fill='black'/><circle cx='0' cy='24.249' r='1' fill='black'/><circle cx='14' cy='24.249' r='1' fill='black'/><circle cx='7' cy='12.124' r='1' fill='black'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 24.249'><circle cx='0' cy='0' r='1' fill='black'/><circle cx='14' cy='0' r='1' fill='black'/><circle cx='0' cy='24.249' r='1' fill='black'/><circle cx='14' cy='24.249' r='1' fill='black'/><circle cx='7' cy='12.124' r='1' fill='black'/></svg>");
+  -webkit-mask-size: var(--pattern-step) var(--pattern-tile);
+  mask-size: var(--pattern-step) var(--pattern-tile);
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-heading);
+  color: var(--color-heading);
+  margin: 0;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-intervention);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
