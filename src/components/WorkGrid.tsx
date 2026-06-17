@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetchProjects } from '../lib/api';
 import { useReveal } from '../hooks/useReveal';
 import type { Project } from '../lib/types';
+import { Lightbox } from './Lightbox';
 import { WorkCard } from './WorkCard';
 import styles from './WorkGrid.module.css';
 
@@ -12,6 +13,7 @@ type Status = 'idle' | 'loading' | 'error' | 'success';
 export function WorkGrid() {
   const [status, setStatus] = useState<Status>('loading');
   const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const { ref: annotationRef, revealed: annotationRevealed } =
     useReveal<HTMLParagraphElement>();
 
@@ -56,9 +58,21 @@ export function WorkGrid() {
 
         {status === 'success' &&
           projects.map((project, i) => (
-            <WorkCard key={project.id} project={project} index={i} />
+            <WorkCard
+              key={project.id}
+              project={project}
+              index={i}
+              onSelect={() => setSelectedIndex(i)}
+            />
           ))}
       </div>
+
+      <Lightbox
+        projects={projects}
+        index={selectedIndex}
+        onClose={() => setSelectedIndex(null)}
+        onIndexChange={setSelectedIndex}
+      />
     </section>
   );
 }
