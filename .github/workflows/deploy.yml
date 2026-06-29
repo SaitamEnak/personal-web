@@ -32,6 +32,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - run: pnpm build
+        env:
+          VITE_CMS_API_URL: ${{ secrets.VITE_CMS_API_URL }}
+          VITE_CMS_API_KEY: ${{ secrets.VITE_CMS_API_KEY }}
 
       - uses: actions/configure-pages@v5
 

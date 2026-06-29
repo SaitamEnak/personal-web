@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Project } from '../lib/types';
 import styles from './Lightbox.module.css';
 
@@ -62,21 +62,46 @@ export function Lightbox({ projects, index, onClose, onIndexChange }: Props) {
   const project = projects[index];
 
   return createPortal(
-    <div
-      className={styles.backdrop}
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label={`${project.title} — ${index + 1} of ${total}`}
-    >
+    <>
+      <div
+        className={styles.backdrop}
+        onClick={onClose}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${project.title} — ${index + 1} of ${total}`}
+      >
+        <div
+          ref={dialogRef}
+          className={styles.dialog}
+          tabIndex={-1}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className={styles.imageWrapper}>
+            <img
+              key={project.id}
+              src={project.thumbnailUrl}
+              alt={project.title}
+              className={styles.image}
+            />
+          </div>
+
+          <div className={styles.info}>
+            <span className={styles.title}>{project.title}</span>
+            {project.description && (
+              <div
+                className={styles.description}
+                dangerouslySetInnerHTML={{ __html: project.description }}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+
       <button
         type="button"
         className={`${styles.iconBtn} ${styles.nav}`}
         data-side="left"
-        onClick={(e) => {
-          e.stopPropagation();
-          goPrev();
-        }}
+        onClick={goPrev}
         aria-label="Previous project"
       >
         <ChevronLeft size={22} strokeWidth={1.8} />
@@ -86,47 +111,12 @@ export function Lightbox({ projects, index, onClose, onIndexChange }: Props) {
         type="button"
         className={`${styles.iconBtn} ${styles.nav}`}
         data-side="right"
-        onClick={(e) => {
-          e.stopPropagation();
-          goNext();
-        }}
+        onClick={goNext}
         aria-label="Next project"
       >
         <ChevronRight size={22} strokeWidth={1.8} />
       </button>
-
-      <div
-        ref={dialogRef}
-        className={styles.dialog}
-        tabIndex={-1}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          type="button"
-          className={`${styles.iconBtn} ${styles.close}`}
-          onClick={onClose}
-          aria-label="Close"
-        >
-          <X size={18} strokeWidth={1.8} />
-        </button>
-
-        <div className={styles.imageWrapper}>
-          <img
-            key={project.id}
-            src={project.thumbnailUrl}
-            alt={project.title}
-            className={styles.image}
-          />
-        </div>
-
-        <div className={styles.caption}>
-          <span className={styles.title}>{project.title}</span>
-          <span className={styles.counter}>
-            {index + 1} / {total}
-          </span>
-        </div>
-      </div>
-    </div>,
+    </>,
     document.body,
   );
 }

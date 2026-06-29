@@ -1,9 +1,9 @@
 {
   "projects": [
-    { "id": "1",  "title": "Project 1",  "thumbnailUrl": "placeholderthumbnail.png" },
-    { "id": "2",  "title": "Project 2",  "thumbnailUrl": "placeholderthumbnail.png" },
-    { "id": "3",  "title": "Project 3",  "thumbnailUrl": "placeholderthumbnail.png" },
-    { "id": "4",  "title": "Project 4",  "thumbnailUrl": "placeholderthumbnail.png" },
+    { "id": "1",  "title": "Project 1",  "thumbnailUrl": "frame1.png", "description": "<p>Branding.</p>" },
+    { "id": "2",  "title": "Project 2",  "thumbnailUrl": "frame1.png", "description": "<p>Brand identity and visual system redesign for a fintech startup.</p>" },
+    { "id": "3",  "title": "Project 3",  "thumbnailUrl": "frame1.png", "description": "<p>End-to-end UX redesign of a B2B SaaS dashboard — research, information architecture, wireframes, and a full component library delivered in six weeks.</p>" },
+    { "id": "4",  "title": "Project 4",  "thumbnailUrl": "frame1.png", "description": "<p>Packaging design for a specialty coffee brand entering three new Latin American markets.</p><img src=\"frame1.png\" alt=\"Packaging detail\" /><p>The system spans primary packaging, secondary boxes, and digital assets, all built around a single visual language that balances premium positioning with local cultural references.</p>" },
     { "id": "5",  "title": "Project 5",  "thumbnailUrl": "placeholderthumbnail.png" },
     { "id": "6",  "title": "Project 6",  "thumbnailUrl": "placeholderthumbnail.png" },
     { "id": "7",  "title": "Project 7",  "thumbnailUrl": "placeholderthumbnail.png" },
