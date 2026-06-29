@@ -16,7 +16,7 @@ const RETRY_DELAYS = [1500, 3000, 6000];
 export async function fetchProjects(signal?: AbortSignal): Promise<ProjectsResponse> {
   const url = import.meta.env.VITE_CMS_API_URL as string;
   const key = import.meta.env.VITE_CMS_API_KEY as string;
-  const headers = key ? { Authorization: `Bearer ${key}` } : {};
+  const headers: HeadersInit = key ? { Authorization: `Bearer ${key}` } : {};
 
   let lastError: unknown;
 
