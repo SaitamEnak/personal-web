@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Matías Canepa — Product Designer</title>
     <meta name="description" content="Personal portfolio of Matías Canepa, product designer." />
+    <link rel="preconnect" href="https://api.hecos.app" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,6 +22,17 @@
           var theme = stored === 'light' || stored === 'dark' ? stored : 'light';
           document.documentElement.setAttribute('data-theme', theme);
         } catch (_) {}
+      })();
+      (function () {
+        var url = '%VITE_CMS_API_URL%';
+        var key = '%VITE_CMS_API_KEY%';
+        if (!url || url.indexOf('%') === 0) return;
+        var headers = key && key.indexOf('%') !== 0 ? { Authorization: 'Bearer ' + key } : {};
+        window.__projectsPromise = fetch(url, { headers: headers }).then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        });
+        window.__projectsPromise.catch(function () {});
       })();
     </script>
     <div id="root"></div>

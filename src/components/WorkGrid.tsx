@@ -6,8 +6,6 @@ import { Lightbox } from './Lightbox';
 import { WorkCard } from './WorkCard';
 import styles from './WorkGrid.module.css';
 
-const SKELETON_COUNT = 20;
-
 type Status = 'idle' | 'loading' | 'error' | 'success';
 
 export function WorkGrid() {
@@ -43,10 +41,6 @@ export function WorkGrid() {
       </p>
 
       <div className={styles.grid}>
-        {status === 'loading' &&
-          Array.from({ length: SKELETON_COUNT }).map((_, i) => (
-            <div key={i} className={`${styles.card} ${styles.cardSkeleton}`} aria-hidden />
-          ))}
 
         {status === 'error' && (
           <p className={styles.error}>Couldn&rsquo;t load projects right now.</p>

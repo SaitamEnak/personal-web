@@ -13,7 +13,36 @@ interface HecosResponse {
 
 const RETRY_DELAYS = [1500, 3000, 6000];
 
+declare global {
+  interface Window {
+    __projectsPromise?: Promise<HecosResponse> | null;
+  }
+}
+
+function toResponse(json: HecosResponse): ProjectsResponse {
+  return {
+    projects: json.data
+      .filter((item) => item._status === 'published')
+      .map((item) => ({
+        id: item.id,
+        title: item.Title,
+        thumbnailUrl: item.Cover,
+      })),
+  };
+}
+
 export async function fetchProjects(signal?: AbortSignal): Promise<ProjectsResponse> {
+  const preloaded = window.__projectsPromise;
+  if (preloaded) {
+    window.__projectsPromise = null;
+    try {
+      const json = await preloaded;
+      return toResponse(json);
+    } catch {
+      // fall through to retry logic below
+    }
+  }
+
   const url = import.meta.env.VITE_CMS_API_URL as string;
   const key = import.meta.env.VITE_CMS_API_KEY as string;
   const headers: HeadersInit = key ? { Authorization: `Bearer ${key}` } : {};
@@ -28,15 +57,7 @@ export async function fetchProjects(signal?: AbortSignal): Promise<ProjectsRespo
       if (!res.ok) throw new Error(`Failed to load projects (${res.status})`);
 
       const json: HecosResponse = await res.json();
-      return {
-        projects: json.data
-          .filter((item) => item._status === 'published')
-          .map((item) => ({
-            id: item.id,
-            title: item.Title,
-            thumbnailUrl: item.Cover,
-          })),
-      };
+      return toResponse(json);
     } catch (err) {
       if (signal?.aborted) throw err;
       lastError = err;

@@ -19,11 +19,10 @@ export function WorkCard({ project, index = 0, onSelect }: Props) {
   });
   const [imgLoaded, setImgLoaded] = useState(false);
 
-  const className = `${styles.card} ${revealed ? styles.cardRevealed : ''}`;
+  const className = `${styles.card} ${revealed && imgLoaded ? styles.cardRevealed : ''}`;
   const style: CSSProperties = {
     transitionDelay: `${(index % COLUMNS) * COLUMN_STAGGER_MS}ms`,
   };
-  const imgClassName = `${styles.cardImage} ${imgLoaded ? styles.cardImageLoaded : ''}`;
 
   return (
     <button
@@ -37,7 +36,7 @@ export function WorkCard({ project, index = 0, onSelect }: Props) {
       <img
         src={project.thumbnailUrl}
         alt={project.title}
-        className={imgClassName}
+        className={styles.cardImage}
         loading="lazy"
         decoding="async"
         onLoad={() => setImgLoaded(true)}
