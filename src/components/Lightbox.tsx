@@ -76,24 +76,12 @@ export function Lightbox({ projects, index, onClose, onIndexChange }: Props) {
           tabIndex={-1}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className={styles.imageWrapper}>
-            <img
-              key={project.id}
-              src={project.thumbnailUrl}
-              alt={project.title}
-              className={styles.image}
-            />
-          </div>
-
-          <div className={styles.info}>
-            <span className={styles.title}>{project.title}</span>
-            {project.description && (
-              <div
-                className={styles.description}
-                dangerouslySetInnerHTML={{ __html: project.description }}
-              />
-            )}
-          </div>
+          <img
+            key={project.id}
+            src={project.thumbnailUrl}
+            alt={project.title}
+            className={styles.image}
+          />
         </div>
       </div>
 

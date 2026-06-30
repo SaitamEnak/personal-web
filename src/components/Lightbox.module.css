@@ -15,25 +15,14 @@
 
 .dialog {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
   background: #ffffff;
   border-radius: var(--radius-lg);
-  padding: 24px;
-  max-width: min(848px, 100%);
+  overflow: hidden;
+  max-width: min(1080px, 100%);
   margin: auto;
   outline: none;
   box-shadow: 0 32px 72px -12px rgba(0, 0, 0, 0.35);
   animation: dialogIn 0.24s var(--ease-out);
-}
-
-.imageWrapper {
-  width: 100%;
-  overflow: hidden;
-  border-radius: var(--radius-md);
-  background: #f0f0f0;
-  flex-shrink: 0;
   line-height: 0;
 }
 
@@ -41,49 +30,6 @@
   width: 100%;
   height: auto;
   display: block;
-}
-
-.info {
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  padding-bottom: 32px;
-}
-
-.title {
-  font-weight: 600;
-  font-size: var(--fs-lg);
-  color: var(--color-heading);
-  margin: 24px 64px 0;
-}
-
-.description {
-  margin-top: 8px;
-}
-
-.description p,
-.description h2,
-.description h3,
-.description ul,
-.description ol {
-  padding-inline: 64px;
-  margin: 0;
-  font-size: var(--fs-sm);
-  color: #4a4a4a;
-  font-weight: 400;
-  line-height: 1.6;
-}
-
-.description p + p {
-  margin-top: 0.75em;
-}
-
-.description img {
-  width: 100%;
-  height: auto;
-  display: block;
-  margin-block: 1em;
-  border-radius: var(--radius-md);
 }
 
 
