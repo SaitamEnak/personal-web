@@ -4,10 +4,19 @@
   min-height: 100dvh;
 }
 
+.layoutLoading {
+  overflow: hidden;
+}
+
 .main {
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--gutter);
   flex: 1;
+  transition: transform 0.7s cubic-bezier(0.87, -0.55, 0.13, 1.55);
+}
+
+.mainLoading {
+  transform: translateY(calc(50vh - 280px));
 }

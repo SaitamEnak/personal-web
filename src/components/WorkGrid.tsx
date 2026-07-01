@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { fetchProjects } from '../lib/api';
-import { useReveal } from '../hooks/useReveal';
 import type { Project } from '../lib/types';
 import { Lightbox } from './Lightbox';
 import { WorkCard } from './WorkCard';
@@ -8,13 +7,14 @@ import styles from './WorkGrid.module.css';
 
 type Status = 'idle' | 'loading' | 'error' | 'success';
 
-export function WorkGrid() {
+interface WorkGridProps {
+  onLoaded?: () => void;
+}
+
+export function WorkGrid({ onLoaded }: WorkGridProps) {
   const [status, setStatus] = useState<Status>('loading');
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const { ref: annotationRef, revealed: annotationRevealed } =
-    useReveal<HTMLParagraphElement>();
-
   useEffect(() => {
     const controller = new AbortController();
     setStatus('loading');
@@ -22,11 +22,13 @@ export function WorkGrid() {
       .then((data) => {
         setProjects(data.projects ?? []);
         setStatus('success');
+        onLoaded?.();
       })
       .catch((err) => {
         if (controller.signal.aborted) return;
         console.error(err);
         setStatus('error');
+        onLoaded?.();
       });
     return () => controller.abort();
   }, []);
@@ -34,8 +36,7 @@ export function WorkGrid() {
   return (
     <section className={styles.section}>
       <p
-        ref={annotationRef}
-        className={`${styles.annotation} ${annotationRevealed ? styles.annotationRevealed : ''}`}
+        className={`${styles.annotation} ${status === 'success' ? styles.annotationRevealed : ''}`}
       >
         this is what I&rsquo;ve been doing
       </p>
