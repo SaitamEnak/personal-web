@@ -37,7 +37,7 @@ export function Header() {
           <span className={styles.locale}>Buenos Aires, Argentina</span>
         </span>
         <div className={styles.actions}>
-          <Button as="a" href="#contact" variant="primary" size="sm">
+          <Button as="a" href="https://www.linkedin.com/in/mcanepadcv/?locale=es" target="_blank" rel="noopener noreferrer" variant="primary" size="sm">
             Get in touch
           </Button>
         </div>

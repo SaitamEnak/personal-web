@@ -20,10 +20,7 @@ export function Hero() {
         stopped creating since.
       </h1>
       <div className={styles.ctas}>
-        <Button as="a" href="#about" variant="secondary">
-          About me
-        </Button>
-        <Button as="a" href="#contact" variant="primary">
+        <Button as="a" href="https://www.linkedin.com/in/mcanepadcv/?locale=es" target="_blank" rel="noopener noreferrer" variant="primary">
           Get in touch
         </Button>
       </div>
