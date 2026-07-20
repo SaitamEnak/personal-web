@@ -1,7 +1,18 @@
-// Vercel Serverless Function: proxies the user's CMS so the API key stays server-side.
+// Vercel Edge Function: proxies the CMS so the API key stays server-side.
 // Configure CMS_API_URL and CMS_API_KEY in Vercel env (Production + Preview).
 
 export const config = { runtime: 'edge' };
+
+interface HecosItem {
+  id: string;
+  Title: string;
+  Cover: string;
+  _status: string;
+}
+
+interface HecosResponse {
+  data: HecosItem[];
+}
 
 export default async function handler(): Promise<Response> {
   const url = process.env.CMS_API_URL;
@@ -29,15 +40,23 @@ export default async function handler(): Promise<Response> {
       );
     }
 
-    const body = await upstream.text();
+    const json: HecosResponse = await upstream.json();
+    const projects = json.data
+      .filter((item) => item._status === 'published')
+      .map((item) => ({
+        id: item.id,
+        title: item.Title,
+        thumbnailUrl: item.Cover,
+      }));
 
-    return new Response(body, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 's-maxage=60, stale-while-revalidate=300',
+    return Response.json(
+      { projects },
+      {
+        headers: {
+          'Cache-Control': 's-maxage=60, stale-while-revalidate=300',
+        },
       },
-    });
+    );
   } catch (err) {
     console.error('CMS proxy error:', err);
     return Response.json({ error: 'Failed to reach upstream CMS.' }, { status: 502 });

@@ -1,34 +1,11 @@
 import type { ProjectsResponse } from './types';
 
-interface HecosItem {
-  id: string;
-  Title: string;
-  Cover: string;
-  _status: string;
-}
-
-interface HecosResponse {
-  data: HecosItem[];
-}
-
 const RETRY_DELAYS = [1500, 3000, 6000];
 
 declare global {
   interface Window {
-    __projectsPromise?: Promise<HecosResponse> | null;
+    __projectsPromise?: Promise<ProjectsResponse> | null;
   }
-}
-
-function toResponse(json: HecosResponse): ProjectsResponse {
-  return {
-    projects: json.data
-      .filter((item) => item._status === 'published')
-      .map((item) => ({
-        id: item.id,
-        title: item.Title,
-        thumbnailUrl: item.Cover,
-      })),
-  };
 }
 
 export async function fetchProjects(signal?: AbortSignal): Promise<ProjectsResponse> {
@@ -36,16 +13,11 @@ export async function fetchProjects(signal?: AbortSignal): Promise<ProjectsRespo
   if (preloaded) {
     window.__projectsPromise = null;
     try {
-      const json = await preloaded;
-      return toResponse(json);
+      return await preloaded;
     } catch {
       // fall through to retry logic below
     }
   }
-
-  const url = import.meta.env.VITE_CMS_API_URL as string;
-  const key = import.meta.env.VITE_CMS_API_KEY as string;
-  const headers: HeadersInit = key ? { Authorization: `Bearer ${key}` } : {};
 
   let lastError: unknown;
 
@@ -53,11 +25,9 @@ export async function fetchProjects(signal?: AbortSignal): Promise<ProjectsRespo
     if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
 
     try {
-      const res = await fetch(url, { signal, headers });
+      const res = await fetch('/api/projects', { signal });
       if (!res.ok) throw new Error(`Failed to load projects (${res.status})`);
-
-      const json: HecosResponse = await res.json();
-      return toResponse(json);
+      return (await res.json()) as ProjectsResponse;
     } catch (err) {
       if (signal?.aborted) throw err;
       lastError = err;
