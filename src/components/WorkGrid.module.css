@@ -26,12 +26,21 @@
 }
 
 .annotation::after {
+  /* One pen stroke down into the left barb, then a second stroke for the right
+     barb — barbs sit symmetrically around the curve's end tangent so the head
+     reads as an arrow instead of a tick. */
+  --arrow: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M1.5 8C11 8.5 21.5 13 26 28l-5.6-5.7'/><path d='M26 28l1.6-7.8'/></svg>");
+
   content: '';
-  width: 28px;
-  height: 28px;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none' stroke='%239822FF' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M4 6 C 14 8, 22 14, 26 24'/><path d='M26 24 L 22 22'/><path d='M26 24 L 24 19'/></svg>");
-  background-repeat: no-repeat;
-  background-position: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  margin-top: 0.6em;
+  /* Masked rather than drawn as a background image so the ink follows
+     --color-intervention through currentColor in both themes. */
+  background-color: currentColor;
+  -webkit-mask: var(--arrow) no-repeat center / contain;
+  mask: var(--arrow) no-repeat center / contain;
 }
 
 .grid {
