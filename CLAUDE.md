@@ -32,7 +32,7 @@ Browser → Vite static (dist/)
                               └─ CMS_API_URL  (Authorization: Bearer CMS_API_KEY)
 ```
 
-**Why the proxy?** A Vite SPA exposes any `VITE_*` env var in the client bundle. To keep the CMS key server-side it's read from non-public `CMS_API_URL` / `CMS_API_KEY` env vars inside the Edge Function and never reaches the browser. The function also adds `Cache-Control: s-maxage=60, stale-while-revalidate=300` so repeated visits hit Vercel's edge cache.
+**Why the proxy?** A Vite SPA exposes any `VITE_*` env var in the client bundle. To keep the CMS key server-side it's read from non-public `CMS_API_URL` / `CMS_API_KEY` env vars inside the Edge Function and never reaches the browser. The function sends `Cache-Control: public, max-age=0, must-revalidate` and fetches upstream with `cache: 'no-store'` — deliberately no edge cache, so a CMS edit shows up on the next reload. Don't reintroduce `s-maxage` / `stale-while-revalidate` here: they held a stale copy for up to ~6 min and served it to the first visitor past the TTL.
 
 **Dev mode:** `vite.config.ts` registers a middleware that runs the real `api/projects.ts` handler for `/api/projects`, loading `CMS_API_URL` / `CMS_API_KEY` from `.env.local` via `loadEnv(mode, cwd, '')`. Dev and prod therefore share one code path. Without this middleware Vite serves `api/projects.ts` as a transpiled JS module (`200 text/javascript`), the client's `res.json()` throws, and the grid never loads.
 

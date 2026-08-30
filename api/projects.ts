@@ -27,6 +27,7 @@ export default async function handler(): Promise<Response> {
 
   try {
     const upstream = await fetch(url, {
+      cache: 'no-store',
       headers: {
         Authorization: `Bearer ${key}`,
         Accept: 'application/json',
@@ -53,7 +54,10 @@ export default async function handler(): Promise<Response> {
       { projects },
       {
         headers: {
-          'Cache-Control': 's-maxage=60, stale-while-revalidate=300',
+          // No edge cache: an edit in the CMS has to be visible on the next
+          // reload. s-maxage + stale-while-revalidate used to hold a stale copy
+          // for up to ~6 min, and served it to the first visitor past the TTL.
+          'Cache-Control': 'public, max-age=0, must-revalidate',
         },
       },
     );
