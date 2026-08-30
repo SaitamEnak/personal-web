@@ -10,17 +10,14 @@ Personal portfolio for Matías Canepa (Product Designer). Single-page site with 
 
 - **Vite + React 18 + TypeScript** (SPA, no router yet)
 - **CSS Modules + CSS variables** for theming (no Tailwind, no UI library)
-- **GitHub Pages** for hosting via the workflow at `.github/workflows/deploy.yml`.
-  - Vite `base: '/personal-web/'` so assets resolve at the repo subpath.
-  - Project list is served as a static JSON at `public/api/projects.json` (16 placeholders for now).
-  - `api/projects.ts` (Vercel Edge Function) is kept in the repo as a reference for when the site moves to a host that supports serverless functions — it is NOT used by the Pages build.
+- **Vercel** for hosting (`vercel.json`). Project list comes from `api/projects.ts` (Edge Function) which proxies the Hecos CMS.
 - Always use `pnpm` (never `npm` / `npx`)
 
 ## Commands
 
 ```sh
 pnpm install                  # install deps
-pnpm dev                      # Vite dev server on :5173 (mocks /api/projects)
+pnpm dev                      # Vite dev server on :5173 (serves /api/projects from .env.local)
 pnpm build                    # tsc -b && vite build
 pnpm preview                  # serve built output locally
 pnpm lint                     # tsc -b --noEmit (type check only)
@@ -37,7 +34,7 @@ Browser → Vite static (dist/)
 
 **Why the proxy?** A Vite SPA exposes any `VITE_*` env var in the client bundle. To keep the CMS key server-side it's read from non-public `CMS_API_URL` / `CMS_API_KEY` env vars inside the Edge Function and never reaches the browser. The function also adds `Cache-Control: s-maxage=60, stale-while-revalidate=300` so repeated visits hit Vercel's edge cache.
 
-**Dev mode:** `vite.config.ts` registers a middleware that mocks `/api/projects` with 16 placeholder cards. This lets `pnpm dev` render the layout without running the proxy or hitting the live CMS. To exercise the real proxy locally, install the Vercel CLI and run `pnpm exec vercel dev` with `.env.local` populated.
+**Dev mode:** `vite.config.ts` registers a middleware that runs the real `api/projects.ts` handler for `/api/projects`, loading `CMS_API_URL` / `CMS_API_KEY` from `.env.local` via `loadEnv(mode, cwd, '')`. Dev and prod therefore share one code path. Without this middleware Vite serves `api/projects.ts` as a transpiled JS module (`200 text/javascript`), the client's `res.json()` throws, and the grid never loads.
 
 ## Theming
 

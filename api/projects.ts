@@ -40,7 +40,7 @@ export default async function handler(): Promise<Response> {
       );
     }
 
-    const json: HecosResponse = await upstream.json();
+    const json = (await upstream.json()) as HecosResponse;
     const projects = json.data
       .filter((item) => item._status === 'published')
       .map((item) => ({
