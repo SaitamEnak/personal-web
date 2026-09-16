@@ -37,7 +37,7 @@ export default async function handler(): Promise<Response> {
     if (!upstream.ok) {
       return Response.json(
         { error: `Upstream CMS responded ${upstream.status}` },
-        { status: 502 },
+        { status: 502, headers: { 'Cache-Control': 'no-store' } },
       );
     }
 
@@ -54,15 +54,23 @@ export default async function handler(): Promise<Response> {
       { projects },
       {
         headers: {
-          // No edge cache: an edit in the CMS has to be visible on the next
-          // reload. s-maxage + stale-while-revalidate used to hold a stale copy
-          // for up to ~6 min, and served it to the first visitor past the TTL.
-          'Cache-Control': 'public, max-age=0, must-revalidate',
+          // The CMS takes 2-4s to answer, so the edge keeps a copy and always
+          // serves it instantly. s-maxage=1 means that copy is considered stale
+          // almost immediately and stale-while-revalidate refreshes it in the
+          // background instead of making the visitor wait. A CMS edit is
+          // therefore at most one reload behind -- never the ~6 min window an
+          // s-maxage of minutes used to produce.
+          'Cache-Control': 'public, max-age=0, s-maxage=1, stale-while-revalidate=86400',
+          // The browser must not hold its own copy: only the edge caches here.
+          'CDN-Cache-Control': 'public, s-maxage=1, stale-while-revalidate=86400',
         },
       },
     );
   } catch (err) {
     console.error('CMS proxy error:', err);
-    return Response.json({ error: 'Failed to reach upstream CMS.' }, { status: 502 });
+    return Response.json(
+      { error: 'Failed to reach upstream CMS.' },
+      { status: 502, headers: { 'Cache-Control': 'no-store' } },
+    );
   }
 }

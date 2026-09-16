@@ -32,7 +32,9 @@ Browser → Vite static (dist/)
                               └─ CMS_API_URL  (Authorization: Bearer CMS_API_KEY)
 ```
 
-**Why the proxy?** A Vite SPA exposes any `VITE_*` env var in the client bundle. To keep the CMS key server-side it's read from non-public `CMS_API_URL` / `CMS_API_KEY` env vars inside the Edge Function and never reaches the browser. The function sends `Cache-Control: public, max-age=0, must-revalidate` and fetches upstream with `cache: 'no-store'` — deliberately no edge cache, so a CMS edit shows up on the next reload. Don't reintroduce `s-maxage` / `stale-while-revalidate` here: they held a stale copy for up to ~6 min and served it to the first visitor past the TTL.
+**Why the proxy?** A Vite SPA exposes any `VITE_*` env var in the client bundle. To keep the CMS key server-side it's read from non-public `CMS_API_URL` / `CMS_API_KEY` env vars inside the Edge Function and never reaches the browser.
+
+**Caching:** The CMS itself answers in 2–4 s, so the function caches at the edge with `s-maxage=1, stale-while-revalidate=86400` (mirrored in `CDN-Cache-Control`; `max-age=0` keeps the browser out of it). The edge always serves its stored copy instantly and refreshes it in the background, so a CMS edit is at most one reload behind. Keep `s-maxage` at ~1 s: raising it to minutes is what previously made an edit invisible for ~6 min. Error responses are sent `no-store` so a CMS outage can't replace the good cached copy. The upstream `fetch` stays `cache: 'no-store'` — the edge is the only cache layer.
 
 **Dev mode:** `vite.config.ts` registers a middleware that runs the real `api/projects.ts` handler for `/api/projects`, loading `CMS_API_URL` / `CMS_API_KEY` from `.env.local` via `loadEnv(mode, cwd, '')`. Dev and prod therefore share one code path. Without this middleware Vite serves `api/projects.ts` as a transpiled JS module (`200 text/javascript`), the client's `res.json()` throws, and the grid never loads.
 
