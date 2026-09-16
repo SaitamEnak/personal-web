@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { fetchProjects } from '../lib/api';
 import type { Project } from '../lib/types';
 import { Lightbox } from './Lightbox';
@@ -15,6 +15,18 @@ export function WorkGrid({ onLoaded }: WorkGridProps) {
   const [status, setStatus] = useState<Status>('loading');
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const cardRefs = useRef(new Map<number, HTMLElement>());
+
+  const registerCard = useCallback((index: number, el: HTMLElement | null) => {
+    if (el) cardRefs.current.set(index, el);
+    else cardRefs.current.delete(index);
+  }, []);
+
+  const getOriginCard = useCallback(
+    (index: number) => cardRefs.current.get(index) ?? null,
+    [],
+  );
   useEffect(() => {
     const controller = new AbortController();
     setStatus('loading');
@@ -58,6 +70,8 @@ export function WorkGrid({ onLoaded }: WorkGridProps) {
               project={project}
               index={i}
               onSelect={() => setSelectedIndex(i)}
+              registerRef={registerCard}
+              hiddenByLightbox={activeIndex === i}
             />
           ))}
       </div>
@@ -67,6 +81,8 @@ export function WorkGrid({ onLoaded }: WorkGridProps) {
         index={selectedIndex}
         onClose={() => setSelectedIndex(null)}
         onIndexChange={setSelectedIndex}
+        getOriginCard={getOriginCard}
+        onActiveIndexChange={setActiveIndex}
       />
     </section>
   );

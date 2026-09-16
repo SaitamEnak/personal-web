@@ -1,16 +1,39 @@
-.backdrop {
+/* The zoom in/out is driven from Lightbox.tsx (Web Animations API), not from
+   CSS keyframes: the opening transform depends on where the grid card sits. */
+.layer {
   position: fixed;
   inset: 0;
   z-index: 100;
+}
+
+/* While the exit animation plays the layer is still painted but inert, so a
+   click can't land on a card mid-flight. */
+.closing {
+  pointer-events: none;
+}
+
+/* The scrim is the only thing that fades. It is a *sibling* of the scroller,
+   never an ancestor of the image: an opacity animation on a parent would drag
+   the image down with it, and the image must stay fully opaque throughout. */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(248, 248, 248, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.scroller {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   padding: var(--space-8) var(--gutter);
   overflow-y: auto;
-  background-color: rgba(248, 248, 248, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  animation: backdropIn 0.18s var(--ease-out);
+  /* The spring overshoots past the dialog's final box; without this the
+     sideways part of that bounce is pannable on narrow screens. */
+  overflow-x: hidden;
 }
 
 .dialog {
@@ -22,14 +45,17 @@
   margin: auto;
   outline: none;
   box-shadow: 0 32px 72px -12px rgba(0, 0, 0, 0.35);
-  animation: dialogIn 0.24s var(--ease-out);
   line-height: 0;
+  transform-origin: 0 0;
+  will-change: transform;
 }
 
 .image {
   width: 100%;
   height: auto;
   display: block;
+  transform-origin: 50% 50%;
+  will-change: transform;
 }
 
 
@@ -57,12 +83,12 @@
 
 
 .nav {
-  position: fixed;
+  position: absolute;
   top: 50%;
   transform: translateY(-50%);
   width: 48px;
   height: 48px;
-  z-index: 101;
+  z-index: 1;
 }
 
 .nav[data-side='left'] {
@@ -81,21 +107,4 @@
   }
   .nav[data-side='left'] { left: 50%; transform: translateX(calc(-100% - var(--space-2))); }
   .nav[data-side='right'] { right: 50%; transform: translateX(calc(100% + var(--space-2))); }
-}
-
-@keyframes backdropIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes dialogIn {
-  from { opacity: 0; transform: translateY(10px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .backdrop,
-  .dialog {
-    animation: none;
-  }
 }

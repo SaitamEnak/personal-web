@@ -94,6 +94,13 @@
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
+/* The lightbox opens standing exactly on this card and returns to it, so the
+   card steps aside while that happens — the same image never shows twice.
+   visibility (not display) keeps the box, which the closing zoom measures. */
+.cardHidden {
+  visibility: hidden;
+}
+
 .cardImage {
   width: 100%;
   height: 100%;
