@@ -28,6 +28,15 @@ const EASE_OUT = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
 /** Mirrors --radius-md / --radius-lg: WAAPI keyframes can't resolve var(). */
 const CARD_RADIUS = 10;
 const DIALOG_RADIUS = 16;
+/**
+ * Must stay identical to .dialog's box-shadow in the stylesheet — the fill
+ * releases to the CSS value once the zoom ends, and any mismatch shows as a
+ * snap. The card end is shadowless because the grid card has no shadow of its
+ * own: a shadow scaled down to card size reads as a dense halo, and popping it
+ * out of existence at unmount is exactly what looked wrong.
+ */
+const DIALOG_SHADOW = '0 32px 72px -12px rgba(0, 0, 0, 0.35)';
+const CARD_SHADOW = '0 0 0 0 rgba(0, 0, 0, 0)';
 
 function prefersReducedMotion() {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
@@ -139,8 +148,16 @@ export function Lightbox({
           order(
             zoom
               ? [
-                  { transform: zoom.dialog, borderRadius: zoom.radius },
-                  { transform: 'none', borderRadius: `${DIALOG_RADIUS}px` },
+                  {
+                    transform: zoom.dialog,
+                    borderRadius: zoom.radius,
+                    boxShadow: CARD_SHADOW,
+                  },
+                  {
+                    transform: 'none',
+                    borderRadius: `${DIALOG_RADIUS}px`,
+                    boxShadow: DIALOG_SHADOW,
+                  },
                 ]
               : [{ transform: 'scale(0.96)' }, { transform: 'none' }],
           ),

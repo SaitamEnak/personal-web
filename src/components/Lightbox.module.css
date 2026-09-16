@@ -44,6 +44,7 @@
   max-width: min(1080px, 100%);
   margin: auto;
   outline: none;
+  /* Kept in sync with DIALOG_SHADOW in Lightbox.tsx, which animates it. */
   box-shadow: 0 32px 72px -12px rgba(0, 0, 0, 0.35);
   line-height: 0;
   transform-origin: 0 0;
