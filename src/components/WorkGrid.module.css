@@ -92,6 +92,9 @@
   transform: translateY(-2px);
   box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.18);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  /* Grid siblings paint in DOM order, so without this the next card covers the
+     hovered card's shadow. Lifting the hovered card puts the shadow on top. */
+  z-index: 2;
 }
 
 /* The lightbox opens standing exactly on this card and returns to it, so the
