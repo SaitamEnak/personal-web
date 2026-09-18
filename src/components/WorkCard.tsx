@@ -31,7 +31,10 @@ export function WorkCard({ project, index = 0, onSelect, registerRef, hiddenByLi
     [ref, registerRef, index],
   );
 
-  const className = `${styles.card} ${revealed && imgLoaded ? styles.cardRevealed : ''} ${
+  // The card reveals on scroll alone. Gating it on imgLoaded too meant a slow
+  // thumbnail left a hole in the grid; now the card's own gradient stands in as
+  // the placeholder and only the image itself fades in when it arrives.
+  const className = `${styles.card} ${revealed ? styles.cardRevealed : ''} ${
     hiddenByLightbox ? styles.cardHidden : ''
   }`;
   const style: CSSProperties = {
@@ -50,8 +53,10 @@ export function WorkCard({ project, index = 0, onSelect, registerRef, hiddenByLi
       <img
         src={project.thumbnailUrl}
         alt={project.title}
-        className={styles.cardImage}
-        loading="lazy"
+        className={`${styles.cardImage} ${imgLoaded ? styles.cardImageLoaded : ''}`}
+        // The first row is above the fold on every breakpoint, so lazy-loading it
+        // only delays the first thing the visitor actually sees.
+        loading={index < COLUMNS ? 'eager' : 'lazy'}
         decoding="async"
         onLoad={() => setImgLoaded(true)}
       />

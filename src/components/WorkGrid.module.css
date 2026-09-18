@@ -108,6 +108,42 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* The card is already on screen by now, so the thumbnail fades onto its
+     gradient instead of the whole card waiting on the network. */
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+}
+
+.cardImageLoaded {
+  opacity: 1;
+}
+
+/* Stand-in cards for the one case with nothing baked into the bundle: an empty
+   snapshot (CMS was down at build time) plus an in-flight fetch. Same box as a
+   real card, so the grid keeps its shape and nothing reflows on arrival. */
+.cardSkeleton {
+  width: 100%;
+  aspect-ratio: 4 / 2.5;
+  border-radius: var(--radius-md);
+  background: var(--color-card-gradient);
+  animation: skeletonPulse 1.6s var(--ease-out) infinite;
+}
+
+@keyframes skeletonPulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardSkeleton {
+    animation: none;
+    opacity: 0.6;
+  }
 }
 
 .empty,
