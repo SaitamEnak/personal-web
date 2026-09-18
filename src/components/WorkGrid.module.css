@@ -14,15 +14,25 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  opacity: 0;
-  transform: translateY(10px) rotate(-1deg);
-  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+  transform: translateY(0) rotate(-1deg);
+  /* An animation rather than a class-toggled transition: the grid renders with
+     the baked snapshot already in hand, so the "revealed" class was on the very
+     first paint and the transition never ran -- this line landed on screen
+     before the hero did. The delay queues it behind the last hero item. */
+  animation: annotation-reveal 0.6s var(--ease-out) 0.7s backwards;
+  transition: opacity 0.3s var(--ease-out);
 }
 
-.annotationRevealed {
-  opacity: 1;
-  transform: translateY(0) rotate(-1deg);
-  transition-delay: 0.25s;
+/* Nothing to point at when the grid failed to load. */
+.annotationHidden {
+  opacity: 0;
+}
+
+@keyframes annotation-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px) rotate(-1deg);
+  }
 }
 
 .annotation::after {
@@ -143,6 +153,15 @@
   .cardSkeleton {
     animation: none;
     opacity: 0.6;
+  }
+
+  .annotation {
+    animation: none;
+  }
+
+  /* Kills the staggered entrance delay the card sets inline, too. */
+  .card {
+    transition: none;
   }
 }
 

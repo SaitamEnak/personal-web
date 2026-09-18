@@ -1,5 +1,6 @@
-import { useCallback, useState, type CSSProperties } from 'react';
+import { useCallback, useRef, useState, type CSSProperties } from 'react';
 import { useReveal } from '../hooks/useReveal';
+import { entranceDelay } from '../lib/entrance';
 import type { Project } from '../lib/types';
 import styles from './WorkGrid.module.css';
 
@@ -37,8 +38,16 @@ export function WorkCard({ project, index = 0, onSelect, registerRef, hiddenByLi
   const className = `${styles.card} ${revealed ? styles.cardRevealed : ''} ${
     hiddenByLightbox ? styles.cardHidden : ''
   }`;
+  // Frozen the moment the card reveals. During the entrance <main> is still
+  // sliding up, so cards cross into view out of order and far too early -- the
+  // entrance floor holds them until the hero and the annotation have had their
+  // turn. Once the entrance is over it is just the column stagger.
+  const delayRef = useRef<number | null>(null);
+  if (revealed && delayRef.current === null) {
+    delayRef.current = entranceDelay() + (index % COLUMNS) * COLUMN_STAGGER_MS;
+  }
   const style: CSSProperties = {
-    transitionDelay: `${(index % COLUMNS) * COLUMN_STAGGER_MS}ms`,
+    transitionDelay: `${delayRef.current ?? 0}ms`,
   };
 
   return (

@@ -61,7 +61,7 @@ export function WorkGrid({ onLoaded }: WorkGridProps) {
   return (
     <section className={styles.section}>
       <p
-        className={`${styles.annotation} ${status !== 'error' ? styles.annotationRevealed : ''}`}
+        className={`${styles.annotation} ${status === 'error' ? styles.annotationHidden : ''}`}
       >
         this is what I&rsquo;ve been doing
       </p>

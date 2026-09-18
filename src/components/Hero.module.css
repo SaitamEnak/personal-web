@@ -26,6 +26,12 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .hero > * {
+    animation: none;
+  }
+}
+
 .avatar {
   width: 72px;
   height: 72px;
