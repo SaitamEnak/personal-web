@@ -27,7 +27,7 @@
   color: #ffffff;
 }
 
-[data-theme='dark'] .primary {
+html[data-theme='dark'] .primary {
   color: #161518;
 }
 
@@ -39,4 +39,38 @@
 .sm {
   padding: 0.45rem 0.9rem;
   font-size: var(--fs-xs);
+}
+
+/* metal-fx wrapper: sizes itself to the button and paints the ring on top. */
+.metal {
+  display: inline-flex;
+  border-radius: var(--radius-pill);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+/* The wrapper takes over the press feedback so the ring travels with the label
+   instead of the canvas staying put while the child nudges down. */
+.metal:active {
+  transform: translateY(1px);
+}
+
+.metal .btn:active {
+  transform: none;
+}
+
+/* metal-fx drops the child's border (`border: 0 !important`) because the ring
+   replaces it. Give that pixel back as padding so a metal pill measures the
+   same as a plain one. */
+.metal .btn {
+  padding: calc(0.6rem + 1px) calc(1.2rem + 1px);
+}
+
+.metal .btn.sm {
+  padding: calc(0.45rem + 1px) calc(0.9rem + 1px);
+}
+
+/* No hover fade on metal buttons. The base `.btn:hover` dims the label (and,
+   on the wrapper, would dim the shader with it) — the ring is the feedback. */
+.metal .btn:hover {
+  opacity: 1;
 }

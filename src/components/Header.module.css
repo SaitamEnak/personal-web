@@ -17,7 +17,7 @@
   justify-content: space-between;
 }
 
-[data-theme='dark'] .header {
+html[data-theme='dark'] .header {
   background: linear-gradient(
     180deg,
     var(--color-bg) 0%,

@@ -18,6 +18,12 @@
 
   /* Button gradients */
   --gradient-btn-primary: linear-gradient(180deg, #333333 0%, #161518 100%);
+  /* Solid stand-in for the gradient above, painted underneath it on metal
+     buttons. metal-fx's bend effect repaints the surface into its canvas from
+     `getComputedStyle(el).backgroundColor` — transparent for a gradient — so
+     without this the pill empties out while the cursor is over it. Track the
+     gradient's end stop. */
+  --color-btn-primary-fill: #161518;
 
   /* Typography */
   --font-heading: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -62,7 +68,10 @@
   --dur-base: 200ms;
 }
 
-[data-theme='dark'] {
+/* Anchored to <html> on purpose: third-party components stamp their own
+   `data-theme` on wrapper elements (metal-fx does it on every button it wraps),
+   and an unscoped selector would let those re-declare the tokens mid-tree. */
+html[data-theme='dark'] {
   --color-bg: #121113;
   --color-surface: #1c1b1e;
   --color-heading: #f4f4f5;
@@ -75,4 +84,5 @@
   --color-pattern-dot: rgba(244, 244, 245, 0.10);
 
   --gradient-btn-primary: linear-gradient(180deg, #f4f4f5 0%, #d4d4d8 100%);
+  --color-btn-primary-fill: #d4d4d8;
 }

@@ -41,7 +41,7 @@ Browser → Vite static (dist/)
 ## Theming
 
 - All colors, spacing, type, radii live as CSS custom properties in `src/styles/tokens.css`.
-- Light theme on `:root`, dark overrides under `[data-theme='dark']`.
+- Light theme on `:root`, dark overrides under `html[data-theme='dark']`. **Always anchor the dark selector to `html`** — third-party components stamp their own `data-theme` on wrapper elements (metal-fx does it on every button it wraps), and an unscoped `[data-theme='dark']` lets them flip the tokens partway down the tree.
 - `useTheme` (in `src/hooks/useTheme.ts`) reads `localStorage.theme`, falls back to `prefers-color-scheme`, and writes `data-theme` to `<html>`. A pre-paint inline script in `index.html` applies the theme before React mounts to avoid flash.
 - Components must reference variables (e.g. `var(--color-text)`) — never hardcode colors.
 
