@@ -4,6 +4,9 @@
   min-height: 100dvh;
 }
 
+/* Stays on until the entrance transform has finished unwinding, not just until
+   the content is ready -- the transform inflates the scrollable area the whole
+   time it is applied. See ENTRANCE_MS in App.tsx. */
 .layoutLoading {
   overflow: hidden;
 }

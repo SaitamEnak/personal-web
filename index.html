@@ -23,6 +23,13 @@
         } catch (_) {}
       })();
       (function () {
+        // Single page, no router: a refresh should start at the top. Left on
+        // "auto" the browser restores the old offset into a document the
+        // entrance transform has temporarily made taller, and the page settles
+        // a few hundred pixels down once that transform unwinds.
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      })();
+      (function () {
         window.__projectsPromise = fetch('/api/projects').then(function (r) {
           if (!r.ok) throw new Error('HTTP ' + r.status);
           return r.json();
